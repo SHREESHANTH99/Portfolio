@@ -115,12 +115,11 @@ Smart contracts are immutable by default. There are patterns to work around this
 
 The Transparent Proxy pattern separates storage from logic:
 
-```
-┌─────────────────┐     ┌──────────────────┐
-│   Proxy         │     │  Implementation  │
-│  (Storage)      │────▶│    (Logic)       │
-│  delegatecall   │     │                  │
-└─────────────────┘     └──────────────────┘
+```mermaid
+graph LR
+    Proxy["Proxy<br/>(Storage)<br/>delegatecall"] -.->|delegatecall| Implementation["Implementation<br/>(Logic)"]
+    classDef box fill:#1a1b26,stroke:#a9b1d6,stroke-width:2px;
+    class Proxy,Implementation box;
 ```
 
 Key considerations:
@@ -201,20 +200,19 @@ if (balance < amount) revert InsufficientBalance(balance, amount);
 
 A robust testing pyramid for smart contracts:
 
-```
-        ┌─────────────┐
-        │  Invariant  │  ← Properties that must always hold
-        │   Tests     │
-        ├─────────────┤
-        │    Fuzz     │  ← Random inputs, edge cases
-        │   Tests     │
-        ├─────────────┤
-        │ Integration │  ← Multi-contract interactions
-        │   Tests     │
-        ├─────────────┤
-        │    Unit     │  ← Individual function behavior
-        │   Tests     │
-        └─────────────┘
+```mermaid
+graph TD
+    Invariant["Invariant Tests<br/><span style='font-size:0.8em'>Properties that must always hold</span>"]
+    Fuzz["Fuzz Tests<br/><span style='font-size:0.8em'>Random inputs, edge cases</span>"]
+    Integration["Integration Tests<br/><span style='font-size:0.8em'>Multi-contract interactions</span>"]
+    Unit["Unit Tests<br/><span style='font-size:0.8em'>Individual function behavior</span>"]
+    
+    Invariant --- Fuzz
+    Fuzz --- Integration
+    Integration --- Unit
+    
+    classDef layer fill:#1a1b26,stroke:#a9b1d6,stroke-width:2px;
+    class Invariant,Fuzz,Integration,Unit layer;
 ```
 
 Example invariant test with Foundry:

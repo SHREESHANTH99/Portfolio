@@ -7,6 +7,8 @@
 
 // import type { MDXComponents } from "mdx/types"; // Fix: Type import failing build
 import Link from "next/link";
+import React from "react";
+import Mermaid from "./Mermaid";
 
 type MDXComponents = Record<string, React.ComponentType<any> | React.ElementType>;
 
@@ -201,15 +203,59 @@ const components: MDXComponents = {
         return <code {...props}>{children}</code>;
     },
 
-    pre: ({ children, ...props }) => (
-        <pre
-            className="rounded-lg overflow-x-auto p-4 my-6
-        bg-[hsl(var(--color-bg-secondary))] border border-[hsl(var(--color-border))]"
-            {...props}
-        >
-            {children}
-        </pre>
-    ),
+    pre: ({ children, ...props }) => {
+        // Extract text content from children (helper)
+        const extractText = (node: any): string => {
+            if (!node) return '';
+            if (typeof node === 'string') return node;
+            if (Array.isArray(node)) return node.map(extractText).join('');
+            if (React.isValidElement(node)) return extractText((node.props as any).children);
+            return '';
+        };
+
+        const className = (props as any).className || '';
+
+        // Strategy 1: logic for nested code block
+        // The structure is usually <pre><code class="language-mermaid">...</code></pre>
+        if (React.isValidElement(children)) {
+            const childProps = (children.props as any) || {};
+            const childClassName = childProps.className || '';
+
+            if (childClassName.includes('language-mermaid')) {
+                const chartCode = extractText(childProps.children);
+                return <Mermaid chart={chartCode} />;
+            }
+        }
+
+        // Strategy 2: Check children array if present
+        if (Array.isArray(children)) {
+            const codeChild = children.find(child =>
+                React.isValidElement(child) &&
+                (child.props as any).className?.includes('language-mermaid')
+            );
+
+            if (codeChild) {
+                const chartCode = extractText((codeChild.props as any).children);
+                return <Mermaid chart={chartCode} />;
+            }
+        }
+
+        // Strategy 3: logic when class is on pre tag itself (sometimes happens with rehype plugins)
+        if (className.includes('language-mermaid')) {
+            const chartCode = extractText(children);
+            return <Mermaid chart={chartCode} />;
+        }
+
+        return (
+            <pre
+                className="rounded-lg overflow-x-auto p-4 my-6
+            bg-[hsl(var(--color-bg-secondary))] border border-[hsl(var(--color-border))]"
+                {...props}
+            >
+                {children}
+            </pre>
+        );
+    },
 
     hr: (props) => (
         <hr className="my-8 border-t border-[hsl(var(--color-border))]" {...props} />

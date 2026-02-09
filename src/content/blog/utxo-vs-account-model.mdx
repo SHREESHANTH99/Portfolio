@@ -49,14 +49,24 @@ mapping(address => uint256) nonces;  // Replay protection
 
 Bitcoin doesn't track balances—it tracks *unspent outputs*. Think of it like physical cash: you don't modify bills, you spend them and receive change.
 
-```
-Transaction 1: Alice receives 10 BTC
-  Output 0: 10 BTC (spendable by Alice)
-
-Transaction 2: Alice pays Bob 3 BTC
-  Input: Reference to Transaction 1, Output 0 (10 BTC)
-  Output 0: 3 BTC (spendable by Bob)
-  Output 1: 7 BTC (change, spendable by Alice)
+```mermaid
+graph TD
+    subgraph Tx1["Transaction 1"]
+        Out0_Tx1["Output 0: 10 BTC<br/>(Spendable by Alice)"]
+    end
+    
+    subgraph Tx2["Transaction 2"]
+        Input_Tx2["Input<br/>Ref: Tx1, Output 0"]
+        Out0_Tx2["Output 0: 3 BTC<br/>(Spendable by Bob)"]
+        Out1_Tx2["Output 1: 7 BTC<br/>(Change for Alice)"]
+    end
+    
+    Out0_Tx1 --> Input_Tx2
+    Input_Tx2 -.-> Out0_Tx2
+    Input_Tx2 -.-> Out1_Tx2
+    
+    classDef tx fill:#1a1b26,stroke:#a9b1d6,stroke-width:2px;
+    class Tx1,Tx2 tx;
 ```
 
 <Callout type="info" title="Key Insight">
@@ -111,12 +121,24 @@ An observer knows Alice made all these payments.
 
 **UTXO Model**: Each transaction can use different outputs and create new ones:
 
-```
-Output_A (10 BTC) → Tx1 → Output_B (3 BTC) → Bob
-                       → Output_C (7 BTC) → Alice (change)
-
-Output_C (7 BTC) → Tx2 → Output_D (2 BTC) → Charlie
-                       → Output_E (5 BTC) → Alice (change)
+```mermaid
+graph LR
+    Output_A["Output_A<br/>(10 BTC)"] --> Tx1
+    Tx1 --> Output_B["Output_B<br/>(3 BTC)"]
+    Tx1 --> Output_C["Output_C<br/>(7 BTC)"]
+    
+    Output_B -.-> Bob
+    Output_C -.-> Alice["Alice<br/>(change)"]
+    
+    Output_C --> Tx2
+    Tx2 --> Output_D["Output_D<br/>(2 BTC)"]
+    Tx2 --> Output_E["Output_E<br/>(5 BTC)"]
+    
+    Output_D -.-> Charlie
+    Output_E -.-> Alice2["Alice<br/>(change)"]
+    
+    classDef box fill:#1a1b26,stroke:#a9b1d6,stroke-width:2px;
+    class Tx1,Tx2 box;
 ```
 
 <Callout type="success" title="Privacy Advantage">

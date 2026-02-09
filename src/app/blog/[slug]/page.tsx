@@ -186,7 +186,7 @@ export default async function BlogPostPage({ params }: Props) {
                     {prevPost ? (
                         <Link
                             href={`/blog/${prevPost.slug}`}
-                            className="group p-4 rounded-lg bg-[hsl(var(--color-bg-secondary))]
+                            className="group p-4 rounded-lg mt-12 mb-12 bg-[hsl(var(--color-bg-secondary))]
                 border border-[hsl(var(--color-border))]
                 hover:border-[hsl(var(--color-border-hover))] transition-colors"
                         >
@@ -206,7 +206,7 @@ export default async function BlogPostPage({ params }: Props) {
                     {nextPost && (
                         <Link
                             href={`/blog/${nextPost.slug}`}
-                            className="group p-4 rounded-lg bg-[hsl(var(--color-bg-secondary))]
+                            className="group p-4 rounded-lg mt-12 mb-12  bg-[hsl(var(--color-bg-secondary))]
                 border border-[hsl(var(--color-border))]
                 hover:border-[hsl(var(--color-border-hover))] transition-colors
                 sm:text-right"
