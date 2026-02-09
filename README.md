@@ -1,36 +1,160 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Shreeshanth Shetty - Developer Portfolio
+
+A high-end, engineering-driven portfolio website built with Next.js, TypeScript, and Tailwind CSS.
+
+## Tech Stack
+
+- **Framework**: Next.js 16 (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS v4
+- **Content**: MDX for blog posts
+- **3D Effects**: Three.js with React Three Fiber
+- **Deployment**: Vercel-ready
+
+## Project Structure
+
+```
+portfolio/
+├── src/
+│   ├── app/                    # Next.js App Router pages
+│   │   ├── page.tsx           # Home page
+│   │   ├── about/page.tsx     # About page
+│   │   ├── projects/page.tsx  # Projects page
+│   │   ├── blog/              # Blog pages
+│   │   │   ├── page.tsx       # Blog index
+│   │   │   └── [slug]/page.tsx # Dynamic blog post
+│   │   ├── contact/page.tsx   # Contact page
+│   │   ├── layout.tsx         # Root layout
+│   │   └── globals.css        # Global styles
+│   ├── components/            # React components
+│   │   ├── Navigation.tsx     # Header navigation
+│   │   ├── Footer.tsx         # Footer component
+│   │   ├── ProjectCard.tsx    # Project display card
+│   │   ├── NetworkBackground.tsx  # Three.js background
+│   │   ├── HomeBackground.tsx # Client wrapper for Three.js
+│   │   └── mdx-components.tsx # Custom MDX components
+│   ├── content/
+│   │   └── blog/              # MDX blog posts
+│   ├── lib/
+│   │   ├── data.ts            # Site configuration & data
+│   │   └── blog.ts            # Blog utilities
+│   └── types/
+│       └── mdx.d.ts           # MDX type definitions
+├── public/                    # Static assets
+└── next.config.ts             # Next.js configuration
+```
+
+## Features
+
+### Pages
+- **Home**: Minimal hero with Three.js animated background
+- **About**: Technical bio, skills, education, achievements
+- **Projects**: Categorized project showcase (Full-Stack & Blockchain)
+- **Blog**: MDX-based technical writing with syntax highlighting
+- **Contact**: Email, GitHub, LinkedIn links
+
+### Design System
+- Dark theme by default
+- Clean, modern typography (Inter + JetBrains Mono)
+- Subtle hover animations
+- Accessible (ARIA, contrast, keyboard nav)
+- Responsive across all devices
+
+### Technical Features
+- SEO-optimized with OpenGraph metadata
+- Three.js background with:
+  - FPS throttling for performance
+  - `prefers-reduced-motion` support
+  - Non-interactive (autonomous animation)
+- MDX blog with:
+  - Syntax highlighting (Prism)
+  - Custom callout components
+  - Reading time estimates
+  - Tag system
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+
+### Installation
 
 ```bash
+# Install dependencies
+npm install
+
+# Start development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm start
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+No environment variables required for basic setup.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Blog Posts
 
-## Learn More
+Blog posts are written in MDX and stored in `src/content/blog/`. Each post requires frontmatter:
 
-To learn more about Next.js, take a look at the following resources:
+```mdx
+---
+title: "Your Post Title"
+description: "A brief description"
+date: "2024-01-15"
+tags: ["Tag1", "Tag2"]
+author: "Your Name"
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Your content here...
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Custom Components
 
-## Deploy on Vercel
+**Callout**:
+```mdx
+<Callout type="info" title="Note">
+  Your callout content here.
+</Callout>
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Types: `info`, `warning`, `error`, `success`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Architecture Decisions
+
+1. **App Router**: Using Next.js App Router for better layouts and server components
+2. **Client Components for Three.js**: Dynamic import with SSR disabled in a client component wrapper
+3. **File-based Blog**: MDX files with frontmatter for simple content management
+4. **next-mdx-remote**: Server-side MDX compilation for blog posts
+5. **Tailwind v4**: Using the latest Tailwind with `@theme` directive
+
+## Customization
+
+### Personal Data
+Edit `src/lib/data.ts` to update:
+- Site configuration (name, role, links)
+- About page content
+- Project information
+- Skills list
+
+### Styling
+Modify `src/app/globals.css` to change:
+- Color palette (CSS custom properties)
+- Typography
+- Animation timings
+
+## License
+
+MIT License - feel free to use this as a template for your own portfolio.
+
+## Author
+
+**Shreeshanth Shetty**
+- GitHub: [@SHREESHANTH99](https://github.com/SHREESHANTH99)
+- LinkedIn: [Shreeshanth Shetty](https://www.linkedin.com/in/shreeshanth-shetty-38b86a331)
+- Email: shreeshanthshetty@gmail.com
