@@ -3,60 +3,69 @@
 /**
  * NetworkBackground Component
  * 
- * A subtle Three.js animated background featuring an abstract network/grid effect.
- * 
- * Architecture Decisions:
- * - Non-interactive: Camera moves autonomously, no mouse/touch handlers
- * - FPS Throttled: Limits rendering to save battery and CPU
- * - Respects prefers-reduced-motion: Completely disables animation for accessibility
- * - Lazy loading: Only renders on client-side to avoid SSR issues
- * 
- * Performance Considerations:
- * - Uses instanced rendering for particles
- * - Limits draw calls by batching geometry
- * - Throttled to 30 FPS max (configurable)
- * - Uses simple shader materials for performance
+ * An interactive Three.js animated background featuring:
+ * - Floating connection nodes
+ * - Mouse interaction (repulsion + connections)
+ * - Smooth camera movement
+ * - Performance optimized
  */
 
-import { useRef, useMemo, useEffect, useState } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
 import * as THREE from "three";
 
 // Configuration
 const CONFIG = {
-    particleCount: 150,
-    connectionDistance: 2.5,
-    maxConnections: 3,
-    particleSize: 0.04,
-    boundarySize: 10,
-    particleSpeed: 0.002,
-    cameraRotationSpeed: 0.0001,
-    targetFPS: 30,
-    frameInterval: 1000 / 30, // ~33ms per frame
+    particleCount: 100,
+    connectionDistance: 2.2,
+    mouseDistance: 3.5,
+    particleSize: 0.05,
+    boundarySize: 14,
+    particleSpeed: 0.005,
+    mouseRepulsion: 0.1,
+    frameInterval: 1000 / 60,
 };
 
-/**
- * Particle System
- * Creates a network of floating nodes that drift slowly
- */
-function ParticleNetwork() {
+function InteractiveNetwork() {
     const pointsRef = useRef<THREE.Points>(null);
     const linesRef = useRef<THREE.LineSegments>(null);
-    const lastFrameTime = useRef(0);
 
-    // Generate particle positions and velocities
+    // Global mouse tracker (normalized -1 to 1)
+    const mouseValues = useRef({ x: 9999, y: 9999 });
+
+    useEffect(() => {
+        const handleMouseMove = (event: MouseEvent) => {
+            // Normalize mouse coordinates to -1 to +1 (NDC)
+            mouseValues.current.x = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseValues.current.y = -(event.clientY / window.innerHeight) * 2 + 1;
+        };
+
+        // Add to window so we track mouse even when over other elements
+        if (typeof window !== 'undefined') {
+            window.addEventListener("mousemove", handleMouseMove);
+        }
+        return () => {
+            if (typeof window !== 'undefined') {
+                window.removeEventListener("mousemove", handleMouseMove);
+            }
+        };
+    }, []);
+
+    const { viewport } = useThree();
+
+    // Generate initial particle state
     const { positions, velocities } = useMemo(() => {
         const pos = new Float32Array(CONFIG.particleCount * 3);
         const vel = new Float32Array(CONFIG.particleCount * 3);
 
         for (let i = 0; i < CONFIG.particleCount; i++) {
             const i3 = i * 3;
-            // Random position within boundary
+            // Spread particles
             pos[i3] = (Math.random() - 0.5) * CONFIG.boundarySize;
             pos[i3 + 1] = (Math.random() - 0.5) * CONFIG.boundarySize;
             pos[i3 + 2] = (Math.random() - 0.5) * CONFIG.boundarySize;
 
-            // Random velocity
+            // Random delicate velocity
             vel[i3] = (Math.random() - 0.5) * CONFIG.particleSpeed;
             vel[i3 + 1] = (Math.random() - 0.5) * CONFIG.particleSpeed;
             vel[i3 + 2] = (Math.random() - 0.5) * CONFIG.particleSpeed;
@@ -65,205 +74,157 @@ function ParticleNetwork() {
         return { positions: pos, velocities: vel };
     }, []);
 
-    // Create geometry for particles
-    const particleGeometry = useMemo(() => {
-        const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
-        return geometry;
+    const geometry = useMemo(() => {
+        const geo = new THREE.BufferGeometry();
+        geo.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+        return geo;
     }, [positions]);
 
-    // Create line geometry for connections
     const lineGeometry = useMemo(() => {
-        const geometry = new THREE.BufferGeometry();
-        // Pre-allocate for max possible connections
-        const maxLines = CONFIG.particleCount * CONFIG.maxConnections;
-        const linePositions = new Float32Array(maxLines * 6); // 2 points per line, 3 coords each
-        geometry.setAttribute("position", new THREE.BufferAttribute(linePositions, 3));
-        return geometry;
+        const geo = new THREE.BufferGeometry();
+        const maxLines = CONFIG.particleCount * CONFIG.particleCount;
+        const linePos = new Float32Array(maxLines * 6);
+        geo.setAttribute("position", new THREE.BufferAttribute(linePos, 3));
+        return geo;
     }, []);
 
-    // Materials
-    const particleMaterial = useMemo(
-        () =>
-            new THREE.PointsMaterial({
-                color: 0x4aa8d8, // Accent primary color
-                size: CONFIG.particleSize,
-                transparent: true,
-                opacity: 0.6,
-                sizeAttenuation: true,
-            }),
-        []
-    );
+    const materials = useMemo(() => ({
+        points: new THREE.PointsMaterial({
+            color: 0x64748b,
+            size: CONFIG.particleSize,
+            transparent: true,
+            opacity: 0.8,
+            sizeAttenuation: true,
+        }),
+        lines: new THREE.LineBasicMaterial({
+            color: 0x4aa8d8,
+            transparent: true,
+            opacity: 0.15,
+        })
+    }), []);
 
-    const lineMaterial = useMemo(
-        () =>
-            new THREE.LineBasicMaterial({
-                color: 0x4aa8d8,
-                transparent: true,
-                opacity: 0.15,
-            }),
-        []
-    );
-
-    // Animation frame - throttled
     useFrame((state) => {
-        const currentTime = state.clock.getElapsedTime() * 1000;
-
-        // Throttle to target FPS
-        if (currentTime - lastFrameTime.current < CONFIG.frameInterval) {
-            return;
-        }
-        lastFrameTime.current = currentTime;
-
         if (!pointsRef.current || !linesRef.current) return;
 
-        const positionAttribute = pointsRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
-        const posArray = positionAttribute.array as Float32Array;
+        const posAttr = pointsRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
+        const posArray = posAttr.array as Float32Array;
 
-        // Update particle positions
+        const lineAttr = linesRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
+        const lineArray = lineAttr.array as Float32Array;
+
+        // Convert 2D mouse (NDC) to 3D world coordinates roughly
+        // This assumes default camera looking at 0,0,0
+        // For z=0 plane:
+        const mouseX = (mouseValues.current.x * viewport.width) / 2;
+        const mouseY = (mouseValues.current.y * viewport.height) / 2;
+        // Keep z somewhat in front to affect particles
+        const mouseZ = 0;
+
+        let lineIndex = 0;
+
         for (let i = 0; i < CONFIG.particleCount; i++) {
             const i3 = i * 3;
 
-            // Apply velocity
+            // Update physics
             posArray[i3] += velocities[i3];
             posArray[i3 + 1] += velocities[i3 + 1];
             posArray[i3 + 2] += velocities[i3 + 2];
 
-            // Boundary check - wrap around
-            const halfBoundary = CONFIG.boundarySize / 2;
-            for (let j = 0; j < 3; j++) {
-                if (posArray[i3 + j] > halfBoundary) {
-                    posArray[i3 + j] = -halfBoundary;
-                } else if (posArray[i3 + j] < -halfBoundary) {
-                    posArray[i3 + j] = halfBoundary;
+            // Wrap
+            const halfB = CONFIG.boundarySize / 2;
+            if (Math.abs(posArray[i3]) > halfB) posArray[i3] = -posArray[i3];
+            if (Math.abs(posArray[i3 + 1]) > halfB) posArray[i3 + 1] = -posArray[i3 + 1];
+            if (Math.abs(posArray[i3 + 2]) > halfB) posArray[i3 + 2] = -posArray[i3 + 2];
+
+            const px = posArray[i3];
+            const py = posArray[i3 + 1];
+            const pz = posArray[i3 + 2];
+
+            // Mouse Interaction - Attract + Repel logic
+            const dx = mouseX - px;
+            const dy = mouseY - py;
+            const dz = mouseZ - pz;
+            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+            if (dist < CONFIG.mouseDistance) {
+                // Push away gently if very close (repulsion)
+                const force = (CONFIG.mouseDistance - dist) * 0.05;
+                posArray[i3] -= dx * force * 0.5;
+                posArray[i3 + 1] -= dy * force * 0.5;
+
+                // Draw line to mouse
+                if (dist < CONFIG.connectionDistance) {
+                    lineArray[lineIndex++] = px;
+                    lineArray[lineIndex++] = py;
+                    lineArray[lineIndex++] = pz;
+                    lineArray[lineIndex++] = mouseX;
+                    lineArray[lineIndex++] = mouseY;
+                    lineArray[lineIndex++] = mouseZ;
                 }
             }
-        }
 
-        positionAttribute.needsUpdate = true;
-
-        // Update connections
-        const linePositions = linesRef.current.geometry.getAttribute("position") as THREE.BufferAttribute;
-        const lineArray = linePositions.array as Float32Array;
-        let lineIndex = 0;
-
-        // Find nearby particles and create connections
-        for (let i = 0; i < CONFIG.particleCount; i++) {
-            let connections = 0;
-            const i3 = i * 3;
-
-            for (let j = i + 1; j < CONFIG.particleCount && connections < CONFIG.maxConnections; j++) {
+            // Connection Logic
+            for (let j = i + 1; j < CONFIG.particleCount; j++) {
                 const j3 = j * 3;
+                const distSq =
+                    (px - posArray[j3]) ** 2 +
+                    (py - posArray[j3 + 1]) ** 2 +
+                    (pz - posArray[j3 + 2]) ** 2;
 
-                // Calculate distance
-                const dx = posArray[i3] - posArray[j3];
-                const dy = posArray[i3 + 1] - posArray[j3 + 1];
-                const dz = posArray[i3 + 2] - posArray[j3 + 2];
-                const distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
-
-                if (distance < CONFIG.connectionDistance) {
-                    // Add line
-                    lineArray[lineIndex++] = posArray[i3];
-                    lineArray[lineIndex++] = posArray[i3 + 1];
-                    lineArray[lineIndex++] = posArray[i3 + 2];
+                if (distSq < CONFIG.connectionDistance * CONFIG.connectionDistance) {
+                    lineArray[lineIndex++] = px;
+                    lineArray[lineIndex++] = py;
+                    lineArray[lineIndex++] = pz;
                     lineArray[lineIndex++] = posArray[j3];
                     lineArray[lineIndex++] = posArray[j3 + 1];
                     lineArray[lineIndex++] = posArray[j3 + 2];
-                    connections++;
                 }
             }
         }
 
-        // Clear remaining line positions
-        for (let i = lineIndex; i < lineArray.length; i++) {
-            lineArray[i] = 0;
-        }
+        // Reset remaining lines
+        for (let k = lineIndex; k < lineArray.length; k++) lineArray[k] = 0;
 
-        linePositions.needsUpdate = true;
+        posAttr.needsUpdate = true;
+        lineAttr.needsUpdate = true;
         linesRef.current.geometry.setDrawRange(0, lineIndex / 3);
+
+        // Rotation
+        const t = state.clock.getElapsedTime();
+        pointsRef.current.rotation.y = t * 0.05;
+        linesRef.current.rotation.y = t * 0.05;
     });
 
     return (
         <>
-            <points ref={pointsRef} geometry={particleGeometry} material={particleMaterial} />
-            <lineSegments ref={linesRef} geometry={lineGeometry} material={lineMaterial} />
+            <points ref={pointsRef} geometry={geometry} material={materials.points} />
+            <lineSegments ref={linesRef} geometry={lineGeometry} material={materials.lines} />
         </>
     );
 }
 
-/**
- * Camera Controller
- * Slowly rotates the camera around the scene origin
- */
-function CameraController() {
-    const { camera } = useThree();
-    const angle = useRef(0);
-
-    useFrame(() => {
-        angle.current += CONFIG.cameraRotationSpeed;
-        camera.position.x = Math.sin(angle.current) * 8;
-        camera.position.z = Math.cos(angle.current) * 8;
-        camera.lookAt(0, 0, 0);
-    });
-
-    return null;
+function Scene() {
+    return (
+        <>
+            {/* Dark background but transparent enough to see through if needed */}
+            {/* Using CSS for background color mostly, but fog matches */}
+            <color attach="background" args={["#111318"]} />
+            <fog attach="fog" args={["#111318", 5, 20]} />
+            <InteractiveNetwork />
+        </>
+    );
 }
 
-/**
- * Main Background Component
- */
 export default function NetworkBackground() {
-    const [shouldRender, setShouldRender] = useState(false);
-    const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
-
-    useEffect(() => {
-        // Check for reduced motion preference
-        const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-        setPrefersReducedMotion(mediaQuery.matches);
-
-        const handleChange = (e: MediaQueryListEvent) => {
-            setPrefersReducedMotion(e.matches);
-        };
-
-        mediaQuery.addEventListener("change", handleChange);
-        setShouldRender(true);
-
-        return () => {
-            mediaQuery.removeEventListener("change", handleChange);
-        };
-    }, []);
-
-    // Don't render on SSR or if user prefers reduced motion
-    if (!shouldRender || prefersReducedMotion) {
-        return (
-            <div
-                className="fixed inset-0 -z-10"
-                style={{
-                    background: `radial-gradient(ellipse at 50% 50%, 
-            hsl(220 14% 12%) 0%, 
-            hsl(220 14% 7%) 100%)`,
-                }}
-                aria-hidden="true"
-            />
-        );
-    }
-
     return (
-        <div className="fixed inset-0 -z-10" aria-hidden="true">
+        <div className="fixed inset-0 -z-10 bg-[hsl(220,14%,7%)]" aria-hidden="true">
             <Canvas
-                camera={{ position: [0, 0, 8], fov: 60 }}
-                dpr={[1, 1.5]} // Limit pixel ratio for performance
-                gl={{
-                    antialias: false, // Disable for performance
-                    alpha: true,
-                    powerPreference: "low-power",
-                }}
-                style={{ background: "hsl(220 14% 7%)" }}
+                dpr={[1, 2]}
+                camera={{ position: [0, 0, 7], fov: 60 }}
+                gl={{ alpha: true, antialias: false, powerPreference: "high-performance" }}
+                style={{ pointerEvents: 'none' }}
             >
-                <color attach="background" args={["hsl(220, 14%, 7%)"]} />
-                <fog attach="fog" args={["hsl(220, 14%, 7%)", 5, 15]} />
-                <CameraController />
-                <ParticleNetwork />
+                <Scene />
             </Canvas>
         </div>
     );

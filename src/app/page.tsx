@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { siteConfig, projects, skills } from "@/lib/data";
 import ProjectCard from "@/components/ProjectCard";
-import HomeBackground from "@/components/HomeBackground";
 import SkillIcon from "@/components/SkillIcon";
 
 /**
@@ -26,7 +25,7 @@ export default function HomePage() {
 
   return (
     <>
-      <HomeBackground />
+
 
       {/* Hero Section */}
       <section

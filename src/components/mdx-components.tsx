@@ -5,8 +5,10 @@
  * Includes callouts, code blocks, and other blog-specific elements.
  */
 
-import type { MDXComponents } from "mdx/types";
+// import type { MDXComponents } from "mdx/types"; // Fix: Type import failing build
 import Link from "next/link";
+
+type MDXComponents = Record<string, React.ComponentType<any> | React.ElementType>;
 
 /**
  * Callout Component

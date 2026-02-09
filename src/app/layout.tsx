@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import HomeBackground from "@/components/HomeBackground";
 import { siteConfig } from "@/lib/data";
 
 /**
@@ -111,6 +112,7 @@ export default function RootLayout({
           Skip to main content
         </a>
 
+        <HomeBackground />
         <Navigation />
 
         <main id="main-content" className="flex-1" role="main">
