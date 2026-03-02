@@ -1,15 +1,12 @@
 /**
- * ProjectCard Component
+ * ProjectCard Component - Cyberpunk Style
  * 
- * Displays project information with hover effects.
  * Features:
- * - Subtle elevation on hover
- * - Technology stack chips
- * - External link indicators
- * - Accessible focus states
+ * - Neon border glow on hover
+ * - Tech chip styling
+ * - Category indicators with icons
  */
 
-import Link from "next/link";
 import { Project } from "@/lib/data";
 
 interface ProjectCardProps {
@@ -20,85 +17,73 @@ interface ProjectCardProps {
 export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
     return (
         <article
-            className="group relative bg-[hsl(var(--color-bg-secondary))] 
-        border border-[hsl(var(--color-border))] rounded-xl
-        card-hover overflow-hidden"
+            className="group relative bg-[#020408] rounded-lg overflow-hidden
+                border border-[#00f7ff]/10
+                hover:border-[#00f7ff]/40
+                transition-all duration-300
+                hover:shadow-[0_0_30px_rgba(0,247,255,0.15)]"
             style={{ animationDelay: `${index * 100}ms` }}
         >
-            {/* Gradient accent on hover */}
-            <div
-                className="absolute inset-0 bg-gradient-to-br 
-          from-[hsl(var(--color-accent-primary)/0.05)] 
-          to-transparent opacity-0 group-hover:opacity-100 
-          transition-opacity duration-300"
-                aria-hidden="true"
-            />
+            {/* Top accent line */}
+            <div className="absolute top-0 left-0 right-0 h-[1px] 
+                bg-gradient-to-r from-transparent via-[#00f7ff]/50 to-transparent
+                opacity-0 group-hover:opacity-100 transition-opacity" />
+
+            {/* Corner accents */}
+            <div className="absolute top-0 left-0 w-4 h-4 border-l-2 border-t-2 border-[#00f7ff]/30 
+                group-hover:border-[#00f7ff] rounded-tl transition-colors" />
+            <div className="absolute top-0 right-0 w-4 h-4 border-r-2 border-t-2 border-[#00f7ff]/30 
+                group-hover:border-[#00f7ff] rounded-tr transition-colors" />
+            <div className="absolute bottom-0 left-0 w-4 h-4 border-l-2 border-b-2 border-[#00f7ff]/30 
+                group-hover:border-[#00f7ff] rounded-bl transition-colors" />
+            <div className="absolute bottom-0 right-0 w-4 h-4 border-r-2 border-b-2 border-[#00f7ff]/30 
+                group-hover:border-[#00f7ff] rounded-br transition-colors" />
 
             <div className="relative p-6">
                 {/* Header */}
                 <div className="flex items-start justify-between gap-4 mb-4">
                     <div>
-                        <h3 className="text-lg font-semibold text-[hsl(var(--color-text-primary))]
-              group-hover:text-[hsl(var(--color-accent-primary))] transition-colors">
+                        <h3 className="font-['Orbitron'] text-lg font-semibold text-white
+                            group-hover:text-[#00f7ff] transition-colors tracking-wide">
                             {project.title}
                         </h3>
-                        <span className="inline-block mt-1 text-xs font-medium uppercase tracking-wider
-              text-[hsl(var(--color-text-tertiary))]">
-                            {project.category === "blockchain" ? "Ethereum / Solidity" : "Full-Stack"}
-                        </span>
                     </div>
 
                     {/* Category Icon */}
                     <div
-                        className={`p-2 rounded-lg shrink-0
-              ${project.category === "blockchain"
-                                ? "bg-[hsl(var(--color-accent-ethereum)/0.1)] text-[hsl(var(--color-accent-ethereum))]"
-                                : "bg-[hsl(var(--color-accent-primary)/0.1)] text-[hsl(var(--color-accent-primary))]"
-                            }`}
+                        className={`p-2.5 rounded-lg shrink-0 border
+                            ${project.category === "blockchain"
+                                ? "bg-[#7c3aed]/10 border-[#7c3aed]/30 text-[#7c3aed] group-hover:border-[#7c3aed]/60"
+                                : "bg-[#00f7ff]/10 border-[#00f7ff]/30 text-[#00f7ff] group-hover:border-[#00f7ff]/60"
+                            } transition-colors`}
                         aria-hidden="true"
                     >
                         {project.category === "blockchain" ? (
-                            // Ethereum icon
                             <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M11.944 17.97L4.58 13.62 11.943 24l7.37-10.38-7.372 4.35h.003zM12.056 0L4.69 12.223l7.365 4.354 7.365-4.35L12.056 0z" />
                             </svg>
                         ) : (
-                            // Code icon
-                            <svg
-                                className="w-5 h-5"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
-                                />
+                            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                    d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
                             </svg>
                         )}
                     </div>
                 </div>
 
                 {/* Description */}
-                <p className="text-sm text-[hsl(var(--color-text-secondary))] mb-4 leading-relaxed">
+                <p className="text-sm font-['Rajdhani'] text-gray-400 mb-4 leading-relaxed">
                     {project.description}
                 </p>
 
                 {/* Highlights */}
-                <ul className="mb-4 space-y-1.5">
+                <ul className="mb-4 space-y-2">
                     {project.highlights.slice(0, 3).map((highlight, i) => (
-                        <li
-                            key={i}
-                            className="flex items-start gap-2 text-xs text-[hsl(var(--color-text-secondary))]"
-                        >
-                            <span
-                                className="inline-block w-1 h-1 rounded-full mt-1.5 shrink-0
-                  bg-[hsl(var(--color-accent-primary))]"
-                                aria-hidden="true"
-                            />
-                            <span>{highlight}</span>
+                        <li key={i} className="flex items-start gap-3 text-xs text-gray-500">
+                            <span className="inline-block w-1.5 h-1.5 rounded-full mt-1.5 shrink-0
+                                bg-[#00f7ff]/50 shadow-[0_0_4px_rgba(0,247,255,0.5)]"
+                                aria-hidden="true" />
+                            <span className="font-['JetBrains_Mono']">{highlight}</span>
                         </li>
                     ))}
                 </ul>
@@ -108,19 +93,19 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                     {project.technologies.slice(0, 6).map((tech) => (
                         <span
                             key={tech}
-                            className="px-2 py-0.5 text-xs rounded-md
-                bg-[hsl(var(--color-bg-tertiary))] 
-                text-[hsl(var(--color-text-tertiary))]"
+                            className="px-2 py-1 text-[10px] font-['JetBrains_Mono'] 
+                                uppercase tracking-wider rounded
+                                bg-[#00f7ff]/5 border border-[#00f7ff]/20
+                                text-[#00f7ff]/70
+                                group-hover:border-[#00f7ff]/40 transition-colors"
                         >
                             {tech}
                         </span>
                     ))}
                     {project.technologies.length > 6 && (
-                        <span
-                            className="px-2 py-0.5 text-xs rounded-md
-                bg-[hsl(var(--color-bg-tertiary))] 
-                text-[hsl(var(--color-text-tertiary))]"
-                        >
+                        <span className="px-2 py-1 text-[10px] font-['JetBrains_Mono'] 
+                            uppercase tracking-wider rounded
+                            bg-[#00f7ff]/5 border border-[#00f7ff]/20 text-[#00f7ff]/70">
                             +{project.technologies.length - 6}
                         </span>
                     )}
@@ -132,26 +117,17 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                         href={project.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5
-              text-sm font-medium rounded-lg
-              bg-[hsl(var(--color-bg-tertiary))]
-              text-[hsl(var(--color-text-secondary))]
-              hover:text-[hsl(var(--color-text-primary))]
-              hover:bg-[hsl(var(--color-bg-elevated))]
-              transition-colors"
+                        className="inline-flex items-center gap-2 px-4 py-2
+                            text-xs font-['JetBrains_Mono'] uppercase tracking-wider
+                            rounded border border-[#00f7ff]/30
+                            bg-[#00f7ff]/5 text-[#00f7ff]/80
+                            hover:bg-[#00f7ff]/10 hover:border-[#00f7ff]/50 hover:text-[#00f7ff]
+                            hover:shadow-[0_0_15px_rgba(0,247,255,0.2)]
+                            transition-all"
                         aria-label={`View ${project.title} source code on GitHub`}
                     >
-                        <svg
-                            className="w-4 h-4"
-                            fill="currentColor"
-                            viewBox="0 0 24 24"
-                            aria-hidden="true"
-                        >
-                            <path
-                                fillRule="evenodd"
-                                d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-                                clipRule="evenodd"
-                            />
+                        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" />
                         </svg>
                         Code
                     </a>
@@ -161,27 +137,18 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                             href={project.liveDemo}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="inline-flex items-center gap-1.5 px-3 py-1.5
-                text-sm font-medium rounded-lg
-                bg-[hsl(var(--color-accent-primary)/0.1)]
-                text-[hsl(var(--color-accent-primary))]
-                hover:bg-[hsl(var(--color-accent-primary)/0.2)]
-                transition-colors"
+                            className="inline-flex items-center gap-2 px-4 py-2
+                                text-xs font-['JetBrains_Mono'] uppercase tracking-wider
+                                rounded border border-[#00ff88]/30
+                                bg-[#00ff88]/5 text-[#00ff88]/80
+                                hover:bg-[#00ff88]/10 hover:border-[#00ff88]/50 hover:text-[#00ff88]
+                                hover:shadow-[0_0_15px_rgba(0,255,136,0.2)]
+                                transition-all"
                             aria-label={`View ${project.title} live demo`}
                         >
-                            <svg
-                                className="w-4 h-4"
-                                fill="none"
-                                stroke="currentColor"
-                                viewBox="0 0 24 24"
-                                aria-hidden="true"
-                            >
-                                <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                                />
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2}
+                                    d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
                             </svg>
                             Demo
                         </a>

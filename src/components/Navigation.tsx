@@ -1,13 +1,12 @@
 "use client";
 
 /**
- * Navigation Component with Transparent Backdrop
+ * Navigation Component - Cyberpunk Style
  * 
  * Key Features:
- * - Semi-transparent backdrop (shows background animation)
- * - Visible navigation bar on all devices
- * - Smooth slide-in drawer
- * - Professional design
+ * - Glassmorphic navbar with cyan glow effects
+ * - Animated mobile drawer
+ * - Neon accents and borders
  */
 
 import { useState, useEffect } from "react";
@@ -20,7 +19,6 @@ export default function Navigation() {
     const [isScrolled, setIsScrolled] = useState(false);
     const pathname = usePathname();
 
-    // Handle scroll effect
     useEffect(() => {
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 10);
@@ -29,12 +27,10 @@ export default function Navigation() {
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    // Close mobile menu on route change
     useEffect(() => {
         setIsOpen(false);
     }, [pathname]);
 
-    // Close menu on escape key
     useEffect(() => {
         const handleEscape = (e: KeyboardEvent) => {
             if (e.key === "Escape") setIsOpen(false);
@@ -43,7 +39,6 @@ export default function Navigation() {
         return () => document.removeEventListener("keydown", handleEscape);
     }, []);
 
-    // Prevent body scroll when mobile menu is open
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
@@ -59,48 +54,57 @@ export default function Navigation() {
             <header
                 className={`fixed top-0 left-0 right-0 z-[90] transition-all duration-300
                     ${isScrolled
-                        ? "bg-[#0a0e13]/98 backdrop-blur-xl border-b border-white/10 shadow-lg"
-                        : "bg-[#0a0e13]/80 backdrop-blur-md border-b border-white/5 lg:bg-transparent lg:border-transparent"
+                        ? "bg-[#020408]/95 backdrop-blur-xl border-b border-[#00f7ff]/20 shadow-[0_0_30px_rgba(0,247,255,0.1)]"
+                        : "bg-transparent border-b border-transparent"
                     }`}
                 role="banner"
             >
-                {/* Container */}
                 <div className="w-full px-4 sm:px-6 lg:px-8">
                     <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20 max-w-7xl mx-auto">
                         {/* Logo */}
                         <Link
                             href="/"
-                            className="relative z-[110] font-bold text-lg sm:text-xl lg:text-2xl
-                                text-white hover:text-[hsl(var(--color-accent-primary))] 
-                                transition-colors flex-shrink-0"
+                            className="relative z-[110] group flex-shrink-0"
                             aria-label={`${siteConfig.name} - Home`}
                         >
-                            <span className="hidden sm:inline">{siteConfig.name}</span>
-                            <span className="sm:hidden text-xl font-black tracking-tighter">
-                                SS<span className="text-[hsl(var(--color-accent-primary))]">.</span>
+                            <span className="font-['Orbitron'] font-bold text-lg sm:text-xl lg:text-2xl
+                                text-white tracking-wider
+                                group-hover:text-[#00f7ff] transition-colors duration-300">
+                                <span className="hidden sm:inline">{siteConfig.name.split(" ")[0]}</span>
+                                <span className="text-[#00f7ff]">.</span>
+                                <span className="hidden sm:inline text-[#00f7ff]/70">{siteConfig.name.split(" ")[1]?.[0]}</span>
+                            </span>
+                            <span className="sm:hidden font-['Orbitron'] font-black text-xl tracking-tighter">
+                                SS<span className="text-[#00f7ff]">.</span>
                             </span>
                         </Link>
 
                         {/* Desktop Navigation */}
-                        <nav className="hidden lg:flex items-center gap-1 xl:gap-2" aria-label="Desktop navigation">
+                        <nav className="hidden lg:flex items-center gap-1" aria-label="Desktop navigation">
                             {navItems.map((item) => (
                                 <Link
                                     key={item.href}
                                     href={item.href}
-                                    className={`px-4 xl:px-5 py-2.5 rounded-full text-sm xl:text-base font-medium 
-                                        transition-all duration-300
+                                    className={`relative px-4 py-2 text-sm font-['JetBrains_Mono'] uppercase tracking-wider
+                                        transition-all duration-300 group
                                         ${pathname === item.href
-                                            ? "text-white bg-white/10 shadow-sm backdrop-blur-sm"
-                                            : "text-gray-300 hover:text-white hover:bg-white/5"
+                                            ? "text-[#00f7ff]"
+                                            : "text-gray-400 hover:text-white"
                                         }`}
                                     aria-current={pathname === item.href ? "page" : undefined}
                                 >
-                                    {item.label}
+                                    <span className="relative z-10">{item.label}</span>
+                                    {pathname === item.href && (
+                                        <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1 h-1 
+                                            bg-[#00f7ff] rounded-full shadow-[0_0_10px_#00f7ff]" />
+                                    )}
+                                    <span className="absolute inset-0 bg-[#00f7ff]/5 rounded 
+                                        opacity-0 group-hover:opacity-100 transition-opacity" />
                                 </Link>
                             ))}
 
-                            {/* Desktop Social Icons */}
-                            <div className="ml-4 pl-4 border-l border-white/10 flex items-center gap-3">
+                            {/* Social Icons */}
+                            <div className="ml-4 pl-4 border-l border-[#00f7ff]/20 flex items-center gap-2">
                                 <SocialLink href={siteConfig.github} icon="github" label="GitHub" />
                                 <SocialLink href={siteConfig.linkedin} icon="linkedin" label="LinkedIn" />
                             </div>
@@ -108,25 +112,25 @@ export default function Navigation() {
 
                         {/* Mobile Menu Button */}
                         <button
-                            className="relative z-[110] lg:hidden w-11 h-11 sm:w-12 sm:h-12 
+                            className="relative z-[110] lg:hidden w-11 h-11 
                                 flex items-center justify-center
-                                text-white rounded-lg
-                                hover:bg-white/10 active:bg-white/15
-                                transition-colors flex-shrink-0"
+                                text-[#00f7ff] rounded-lg border border-[#00f7ff]/30
+                                hover:bg-[#00f7ff]/10 hover:border-[#00f7ff]/50
+                                transition-all duration-300 flex-shrink-0"
                             onClick={() => setIsOpen(!isOpen)}
                             aria-expanded={isOpen}
                             aria-controls="mobile-menu"
                             aria-label={isOpen ? "Close menu" : "Open menu"}
                         >
-                            <div className="w-6 h-5 flex flex-col justify-between relative">
+                            <div className="w-5 h-4 flex flex-col justify-between relative">
                                 <span className={`block h-0.5 w-full bg-current rounded-full transition-all duration-300 origin-center
-                                    ${isOpen ? "rotate-45 translate-y-[9px]" : ""}`}
+                                    ${isOpen ? "rotate-45 translate-y-[7px]" : ""}`}
                                 />
                                 <span className={`block h-0.5 w-full bg-current rounded-full transition-all duration-300
                                     ${isOpen ? "opacity-0 scale-0" : ""}`}
                                 />
                                 <span className={`block h-0.5 w-full bg-current rounded-full transition-all duration-300 origin-center
-                                    ${isOpen ? "-rotate-45 -translate-y-[9px]" : ""}`}
+                                    ${isOpen ? "-rotate-45 -translate-y-[7px]" : ""}`}
                                 />
                             </div>
                         </button>
@@ -134,9 +138,9 @@ export default function Navigation() {
                 </div>
             </header>
 
-            {/* Mobile Menu Backdrop - LIGHTER to show background animation */}
+            {/* Mobile Menu Backdrop */}
             <div
-                className={`fixed inset-0 bg-black/40 backdrop-blur-sm z-[95] lg:hidden 
+                className={`fixed inset-0 bg-black/60 backdrop-blur-sm z-[95] lg:hidden 
                     transition-opacity duration-300
                     ${isOpen ? "opacity-100 visible" : "opacity-0 invisible"}`}
                 onClick={() => setIsOpen(false)}
@@ -147,53 +151,57 @@ export default function Navigation() {
             <aside
                 id="mobile-menu"
                 className={`fixed top-0 right-0 bottom-0 
-                    w-[280px] xs:w-[300px] sm:w-[340px]
+                    w-[280px] sm:w-[320px]
                     z-[100] lg:hidden
-                    bg-[#0f1419]/95 backdrop-blur-xl
-                    border-l border-white/10
-                    shadow-2xl
+                    bg-[#020408]/98 backdrop-blur-xl
+                    border-l border-[#00f7ff]/20
+                    shadow-[-10px_0_40px_rgba(0,247,255,0.1)]
                     transform transition-transform duration-300 ease-out
                     flex flex-col
-                    overflow-hidden
                     ${isOpen ? "translate-x-0" : "translate-x-full"}`}
                 aria-hidden={!isOpen}
             >
                 {/* Drawer Header */}
-                <div className="flex-shrink-0 h-16 sm:h-18 flex items-center justify-between px-5 sm:px-6
-                    border-b border-white/10">
-                    <span className="text-lg font-bold text-white">Menu</span>
+                <div className="flex-shrink-0 h-16 flex items-center justify-between px-5
+                    border-b border-[#00f7ff]/20">
+                    <span className="font-['Orbitron'] text-lg font-bold text-[#00f7ff] tracking-wider">
+                        MENU
+                    </span>
                     <button
                         onClick={() => setIsOpen(false)}
                         className="w-10 h-10 flex items-center justify-center rounded-lg
-                            text-gray-400 hover:text-white
-                            hover:bg-white/10 active:bg-white/15
-                            transition-colors"
+                            text-[#00f7ff] border border-[#00f7ff]/30
+                            hover:bg-[#00f7ff]/10 transition-colors"
                         aria-label="Close menu"
                     >
-                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
 
                 {/* Navigation Links */}
-                <nav className="flex-1 px-5 sm:px-6 py-6 overflow-y-auto" aria-label="Mobile navigation">
-                    <span className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">
-                        Pages
+                <nav className="flex-1 px-4 py-6 overflow-y-auto" aria-label="Mobile navigation">
+                    <span className="block text-xs font-['JetBrains_Mono'] text-[#00f7ff]/50 uppercase tracking-widest mb-4 px-2">
                     </span>
-                    <ul className="space-y-1.5">
+                    <ul className="space-y-1">
                         {navItems.map((item) => (
                             <li key={item.href}>
                                 <Link
                                     href={item.href}
                                     onClick={() => setIsOpen(false)}
-                                    className={`flex items-center px-4 py-3.5 rounded-xl
-                                        text-base font-medium transition-all duration-200
+                                    className={`flex items-center px-4 py-3 rounded-lg
+                                        font-['JetBrains_Mono'] text-sm uppercase tracking-wider
+                                        transition-all duration-200 border
                                         ${pathname === item.href
-                                            ? "text-white bg-white/10 shadow-sm"
-                                            : "text-gray-300 hover:text-white hover:bg-white/5 active:bg-white/10"
+                                            ? "text-[#00f7ff] bg-[#00f7ff]/10 border-[#00f7ff]/30"
+                                            : "text-gray-400 hover:text-white border-transparent hover:bg-[#00f7ff]/5"
                                         }`}
                                 >
+                                    {pathname === item.href && (
+                                        <span className="w-1.5 h-1.5 bg-[#00f7ff] rounded-full mr-3 
+                                            shadow-[0_0_10px_#00f7ff]" />
+                                    )}
                                     {item.label}
                                 </Link>
                             </li>
@@ -201,14 +209,13 @@ export default function Navigation() {
                     </ul>
                 </nav>
 
-                {/* Drawer Footer - Social Links */}
-                <div className="flex-shrink-0 p-5 sm:p-6 border-t border-white/10 bg-white/[0.02]">
-                    <span className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4 text-center">
-                        Connect
+                {/* Drawer Footer */}
+                <div className="flex-shrink-0 p-5 border-t border-[#00f7ff]/20">
+                    <span className="block text-xs font-['JetBrains_Mono'] text-[#00f7ff]/50 uppercase tracking-widest mb-4 text-center">
                     </span>
                     <div className="flex items-center justify-center gap-4">
-                        <SocialLink href={siteConfig.github} icon="github" label="GitHub" size="lg" mobile />
-                        <SocialLink href={siteConfig.linkedin} icon="linkedin" label="LinkedIn" size="lg" mobile />
+                        <SocialLink href={siteConfig.github} icon="github" label="GitHub" size="lg" />
+                        <SocialLink href={siteConfig.linkedin} icon="linkedin" label="LinkedIn" size="lg" />
                     </div>
                 </div>
             </aside>
@@ -216,19 +223,16 @@ export default function Navigation() {
     );
 }
 
-// Social Link Component
 function SocialLink({
     href,
     icon,
     label,
-    size = "sm",
-    mobile = false
+    size = "sm"
 }: {
     href: string;
     icon: 'github' | 'linkedin';
     label: string;
     size?: "sm" | "lg";
-    mobile?: boolean;
 }) {
     const isLg = size === 'lg';
 
@@ -238,18 +242,15 @@ function SocialLink({
             target="_blank"
             rel="noopener noreferrer"
             className={`rounded-lg transition-all flex items-center justify-center
-                border border-white/10
-                ${mobile
-                    ? "text-gray-300 hover:text-white bg-white/5 hover:bg-white/10 active:bg-white/15"
-                    : "text-gray-400 hover:text-white hover:bg-white/5"
-                }
-                active:scale-95
-                ${isLg ? "p-4" : "p-2.5"}`}
+                border border-[#00f7ff]/30 text-gray-400
+                hover:text-[#00f7ff] hover:border-[#00f7ff]/50 hover:bg-[#00f7ff]/10
+                hover:shadow-[0_0_15px_rgba(0,247,255,0.2)]
+                ${isLg ? "p-3" : "p-2"}`}
             aria-label={label}
         >
             {icon === 'github' ? (
                 <svg
-                    className={isLg ? "w-6 h-6" : "w-5 h-5"}
+                    className={isLg ? "w-5 h-5" : "w-4 h-4"}
                     fill="currentColor"
                     viewBox="0 0 24 24"
                     aria-hidden="true"
@@ -258,7 +259,7 @@ function SocialLink({
                 </svg>
             ) : (
                 <svg
-                    className={isLg ? "w-6 h-6" : "w-5 h-5"}
+                    className={isLg ? "w-5 h-5" : "w-4 h-4"}
                     fill="currentColor"
                     viewBox="0 0 24 24"
                     aria-hidden="true"
