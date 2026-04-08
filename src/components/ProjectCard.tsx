@@ -78,11 +78,14 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
 
                 {project.engineeringInsight && (
                     <p className="text-xs font-['Rajdhani'] text-[#00f7ff]/70 mb-4 italic leading-relaxed">
-                        Engineering Insight: {project.engineeringInsight}
+                        Focus: {project.engineeringInsight}
                     </p>
                 )}
 
                 {/* Highlights */}
+                <h4 className="text-xs font-['JetBrains_Mono'] uppercase tracking-wider text-[#00f7ff]/65 mb-3">
+                    Key Engineering Highlights
+                </h4>
                 <ul className="mb-4 space-y-2">
                     {project.highlights.slice(0, 3).map((highlight, i) => (
                         <li key={i} className="flex items-start gap-3 text-xs text-gray-500">

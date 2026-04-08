@@ -17,10 +17,10 @@ import SkillIcon from "@/components/SkillIcon";
  */
 
 export default function HomePage() {
-  // Get 2 featured projects (1 fullstack, 1 blockchain)
+  // Get featured projects aligned to systems and tooling work
   const featuredProjects = [
-    projects.find((p) => p.category === "fullstack"),
-    projects.find((p) => p.category === "blockchain"),
+    projects.find((p) => p.id === "lifecheck-ai"),
+    projects.find((p) => p.id === "gitwhisper"),
   ].filter(Boolean);
 
   return (
@@ -71,6 +71,11 @@ export default function HomePage() {
             <p className="text-lg sm:text-xl text-[hsl(var(--color-text-tertiary))]
               max-w-xl mx-auto mb-12 animate-fade-in stagger-3">
               {siteConfig.tagline}
+            </p>
+
+            <p className="text-base sm:text-lg text-[hsl(var(--color-accent-primary))]
+              font-medium mb-12 animate-fade-in stagger-3">
+              &bull; {siteConfig.heroHighlight}
             </p>
 
             {/* CTA Buttons */}
@@ -148,7 +153,7 @@ export default function HomePage() {
           </h2>
 
           <div className="flex flex-wrap justify-center gap-6 md:gap-10">
-            {[...skills.languages.slice(0, 3), ...skills.blockchain.slice(0, 3)].map((skill, i) => (
+            {[...skills.languages.slice(0, 3), ...skills.backendSystems.slice(0, 3)].map((skill, i) => (
               <div
                 key={skill}
                 className="group flex flex-col items-center gap-3 p-4
@@ -187,7 +192,7 @@ export default function HomePage() {
                 Featured Work
               </h2>
               <p className="text-lg text-[hsl(var(--color-text-secondary))]">
-                Recent projects showcasing full-stack and blockchain development.
+                Recent projects showcasing backend systems, real-time architectures, and AI tooling.
               </p>
             </div>
             <Link

@@ -7,8 +7,9 @@
 
 export const siteConfig = {
   name: "Shreeshanth Shetty",
-  role: "Full-Stack Engineer | Smart Contract Developer",
-  tagline: "Building production-grade systems with a focus on performance, security, and clean architecture.",
+  role: "Backend-Focused Engineer | Distributed Systems | AI + Real-Time Applications",
+  tagline: "I build backend systems and intelligent applications focused on real-world decision making, reliability, and scalability. My work spans AI-driven platforms, real-time distributed systems, and secure backend architectures.",
+  heroHighlight: "FastAPI | Python | System Design | Realtime Systems | AI Integration",
   
   // Contact information
   email: "shreeshanthshetty@gmail.com",
@@ -31,29 +32,39 @@ export const aboutData = {
   title: "About",
   subtitle: "Engineering systems that scale.",
   
-  intro: `I'm a full-stack engineer with a strong focus on building production-grade systems. My work spans from designing robust backend APIs and database architectures to developing secure smart contracts on Ethereum.`,
+  intro: `Hi there! I am Shreeshanth, a developer with a passion for building systems that are capable of solving problems. My expertise lies in developing solutions involving backend logic and real-time behavior of applications.`,
+  systemsNote: "One thing that I enjoy is understanding the internal functioning of a system and learning about aspects such as APIs, data manipulation, and ensuring reliability even under edge conditions. In recent times, I have been focusing on building AI-based and real-time systems via initiatives such as LifeCheck AI and GitWhisper. Apart from programming, I also like to watch anime shows and learn new technologies. It was this curiosity that led me to pursue systems engineering instead of merely using systems.",
+  recentBuild: "It is also my dream to stay and live in Japan since childhood. Currently, I am preparing myself to become a great backend engineer.",
   
   focus: [
     {
-      title: "Backend & Infrastructure",
-      description: "Designing scalable REST and GraphQL APIs, implementing efficient database schemas with MongoDB and PostgreSQL, and building real-time systems with WebSocket integration.",
-      technologies: ["Node.js", "NestJS", "Express", "MongoDB", "PostgreSQL", "Socket.IO"],
+      title: "Scalable Backend Architectures",
+      description: "Designing scalable backend architectures for production systems with clean service boundaries and dependable APIs.",
+      technologies: ["FastAPI", "Node.js"],
     },
     {
-      title: "Smart Contract Development",
-      description: "Writing secure Solidity contracts with emphasis on gas optimization, implementing EIP standards (ERC-721, EIP-5192), and building comprehensive test suites with Hardhat.",
-      technologies: ["Solidity", "Hardhat", "OpenZeppelin", "Wagmi", "Viem", "ethers.js"],
+      title: "Real-Time Systems",
+      description: "Building real-time systems with event-driven updates, WebSocket communication, and shared state synchronization.",
+      technologies: ["WebSockets", "Shared State Systems"],
     },
     {
-      title: "Frontend Engineering",
-      description: "Building responsive, accessible interfaces with React and Next.js. Focus on component architecture, state management, and performance optimization.",
-      technologies: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Three.js"],
+      title: "AI Integration with Guardrails",
+      description: "Integrating AI systems with strong guardrails, fallback strategies, and robust control over model behavior.",
+      technologies: ["Gemini", "Grok", "Fallback Strategies"],
     },
     {
-      title: "Systems Thinking",
-      description: "Approaching problems with an understanding of trade-offs between consistency, availability, and partition tolerance. Designing for maintainability and extensibility.",
-      technologies: ["System Design", "Architecture Patterns", "Testing", "CI/CD"],
+      title: "Reliability Engineering",
+      description: "Handling edge cases, reliability concerns, and production-level failure scenarios through defensive engineering.",
+      technologies: ["Validation", "Fault Tolerance", "Error Handling"],
     },
+  ],
+
+  engineeringFocus: [
+    "Building reliable backend systems",
+    "Designing real-time applications with shared state",
+    "Integrating AI safely using guardrails and fallback models",
+    "Handling edge cases and failure scenarios",
+    "Writing clean, maintainable, production-ready code",
   ],
   
   education: {
@@ -63,7 +74,9 @@ export const aboutData = {
   },
   
   achievements: [
-    "1st Place at 'Can You Hack It' (24-hour hackathon, 100+ teams)",
+    "Top-50 team in EIBS National Hackathon (IIT KGP) 2026, competing among 300+ submissions.",
+    "Winner (1st place) at 'Can You Hack It' 24-hour inter-college hackathon (IIITDM Jabalpur) among 100+ teams.",
+    "Contributed to open-source projects (MusicBrainz, Braidpool, Learning Unlimited) in Python/JavaScript and Django, demonstrating strong collaboration.",
   ],
 };
 
@@ -121,16 +134,16 @@ export const projects: Project[] = [
   {
     id: "animatch",
     title: "AniMatch",
-    description: "AI-powered anime discovery platform with hybrid recommendation engine.",
-    longDescription: "A full-stack anime web application for discovering, tracking, and getting AI-powered recommendations. Built with a hybrid recommendation system combining content-based filtering with TF-IDF vectorization and popularity scoring.",
+    description: "Built a full-stack recommendation system with user behavior-based personalization.",
+    longDescription: "AniMatch is a full-stack recommendation system built around user behavior-driven personalization, scalable backend recommendation APIs, and efficient content retrieval workflows. The system emphasizes data processing logic, recommendation quality, and low-latency user experiences.",
     category: "fullstack",
     technologies: ["React", "Node.js", "Express", "MongoDB", "Python", "Flask", "Three.js", "scikit-learn"],
     github: "https://github.com/SHREESHANTH99/Animatch",
     highlights: [
-      "Hybrid ML recommendation engine using TF-IDF with 5000 features",
-      "Cold-start recommendations for new users based on popularity metrics",
-      "3D Anime Poster Cube built with React Three Fiber",
-      "Cosine similarity for 'similar anime' suggestions",
+      "Built a full-stack recommendation system with user behavior-based personalization",
+      "Implemented efficient data fetching and filtering pipelines",
+      "Designed scalable backend APIs for recommendation logic",
+      "Developed ML ranking logic for relevance-driven suggestions",
     ],
   },
   {
@@ -150,49 +163,41 @@ export const projects: Project[] = [
   },
   {
     id: "lifecheck-ai",
-    title: "LifeCheck AI — Environmental Intelligence Platform",
-    description: "Full-stack environmental intelligence platform for real-time location safety decisions.",
-    longDescription: "LifeCheck AI is a full-stack environmental intelligence system designed to help users make real-time safety decisions based on environmental data. It answers a core question: Is this location safe right now, and what should I do next? The platform combines live AQI, weather, UV, and pollen signals into a unified safety verdict while coordinating AI guidance, predictive analytics, and spatial risk insights.",
-    engineeringInsight: "Focused on building a reliable, real-time decision system combining distributed state, AI inference, and multi-source data aggregation.",
+    title: "LifeCheck AI — Real-Time Environmental Intelligence Platform",
+    description: "A full-stack system that evaluates environmental safety in real time using AI, machine learning, and distributed state systems.",
+    longDescription: "LifeCheck AI is a full-stack real-time environmental intelligence system that evaluates location safety through AI, machine learning, and distributed state design. It aggregates multiple environmental signals, predicts water quality with confidence measures, and delivers guided actions through low-latency AI and alert orchestration.",
+    engineeringInsight: "System Design | Real-Time Systems | AI Integration | Reliability",
     category: "fullstack",
-    technologies: ["Python", "FastAPI", "Next.js", "TypeScript", "Rust", "SpaceTimeDB", "scikit-learn", "WebSockets", "Gemini AI", "ElevenLabs"],
+    technologies: ["Python (FastAPI)", "Next.js", "SpaceTimeDB (Rust)", "Gemini AI", "Grok", "WebSockets", "ElevenLabs"],
     github: "https://github.com/SHREESHANTH99/LifeCheckAi",
     highlights: [
-      "Real-time safety analysis combining AQI, weather, UV, and pollen into Safe / Caution / Unsafe verdicts",
-      "AI assistant with low-latency streaming responses for contextual safety guidance",
-      "ML-based water quality prediction with confidence scoring and BIS compliance analysis",
-      "Interactive map for spatial risk visualization and real-time activity tracking",
-      "Alert system with severity prioritization and unread tracking",
-      "Voice-first safety briefings and alerts using text-to-speech",
-      "FastAPI backend with modular services for safety, chat, water, and alerts",
-      "SpaceTimeDB-powered shared state synchronization for multi-user real-time updates",
-      "Multi-LLM orchestration across Gemini, Groq, and DeepSeek with fallback strategy",
-      "Robust validation and null-safe data handling for production reliability",
-      "Event-driven architecture for real-time updates and alerting",
-      "Scalable external-provider integration with strong error handling and fallback paths",
+      "Built FastAPI backend handling real-time environmental aggregation (AQI, weather, UV, pollen)",
+      "Designed ML pipeline for water quality prediction with confidence scoring and BIS compliance analysis",
+      "Implemented streaming AI assistant with guardrails (Gemini + Grok fallback architecture)",
+      "Built real-time shared state system using SpaceTimeDB (multi-user synchronization)",
+      "Integrated voice-first interaction using ElevenLabs with fallback handling",
+      "Designed alert system with severity prioritization and unread state persistence",
+      "Generated unified Safe / Caution / Unsafe verdicts for real-time decision support",
     ],
   },
   {
     id: "gitwhisper",
-    title: "GitWhisper — AI-Powered Git Commit Generator",
-    description: "Developer CLI tool that generates meaningful commit messages from staged code diffs.",
-    longDescription: "GitWhisper is a developer productivity tool that automatically generates meaningful Git commit messages using AI based on code changes. It analyzes staged diffs, builds contextual prompts, and returns concise structured commit messages that fit naturally into daily development workflows.",
-    engineeringInsight: "Focused on automating developer workflows using AI with reliability and minimal latency.",
+    title: "GitWhisper — AI-Powered Git History Understanding Tool",
+    description: "A local-first CLI tool that analyzes git commit history and generates human-readable summaries, changelogs, and project narratives using LLMs.",
+    longDescription: "GitWhisper is a developer productivity tool that converts raw git commit history into structured, human-readable insights. Instead of manually interpreting commit logs, the tool analyzes commit sequences and generates project summaries, change explanations, changelogs, and demo scripts for presentations. The system works locally by extracting commit metadata using native git commands, structuring it into contextual project memory, and passing it through LLM pipelines for interpretation. The architecture is designed to transform low-level commit data into high-level reasoning about project evolution, intent, and impact, while supporting configurable model selection and fallback strategies across providers.",
+    engineeringInsight: "Local-First Architecture | Prompt Pipelines | Multi-Model Reliability",
     category: "developer-tools",
-    technologies: ["Python", "Git CLI", "Grok API", "Gemini AI", "Prompt Engineering"],
+    technologies: ["Rust", "Python", "Gemini AI", "Grok", "Git CLI"],
     github: "https://github.com/SHREESHANTH99/GitWhisper",
     highlights: [
-      "Analyzes staged Git diffs and generates structured, meaningful commit messages",
-      "Integrates Grok and Gemini for high-quality natural language generation",
-      "CLI-based workflow for seamless integration in developer environments",
-      "Context-aware understanding of code changes for accurate commit summaries",
-      "Python CLI architecture using subprocess integration with Git",
-      "Prompt formatting pipeline that transforms diffs into model-ready context",
-      "Multi-provider AI fallback handling for resilient message generation",
-      "Secure API usage with efficient request handling",
-      "Robust error handling for no staged changes and API failure cases",
-      "Optimized prompt engineering for concise and reliable output",
-      "Lightweight design optimized for daily low-latency usage",
+      "Built CLI tool in Rust for performance and low overhead",
+      "Designed commit-history parsing system using native git commands",
+      "Engineered prompt pipelines for extracting intent and evolution from commits",
+      "Integrated multiple LLM providers (Gemini, Grok) with configurable model selection",
+      "Implemented structured output generation (summaries, changelogs, demo scripts)",
+      "Focused on local-first architecture for privacy and developer control",
+      "Designed system to convert technical logs into human-understandable narratives",
+      "Helps developers quickly understand, present, and document projects by converting commit history into meaningful narratives",
     ],
   },
   
@@ -242,9 +247,15 @@ export const navItems = [
 
 // Skills organized by category
 export const skills = {
-  languages: ["TypeScript", "JavaScript", "Python", "Solidity", "Rust", "C++"],
-  frontend: ["React", "Next.js", "Three.js", "Tailwind CSS", "Framer Motion"],
-  backend: ["Node.js", "NestJS", "Express", "MongoDB", "PostgreSQL", "Socket.IO"],
-  blockchain: ["Hardhat", "OpenZeppelin", "Wagmi", "ethers.js", "Viem"],
-  tools: ["Git", "Docker", "GitHub Actions", "Vercel", "Firebase", "Postman"],
+  languages: ["Python", "C++", "JavaScript", "TypeScript", "Rust", "Solidity"],
+  backendSystems: ["FastAPI", "Node.js", "REST APIs", "WebSockets", "Distributed Systems"],
+  databasesInfra: ["MongoDB", "Supabase", "Docker", "Linux"],
+  tools: ["Git", "GitHub Actions", "Postman"],
+  concepts: ["System Design", "Real-Time Systems", "API Design", "Fault Tolerance"],
 };
+
+export const highlightedWork = [
+  "LifeCheck AI (Primary System Project)",
+  "GitWhisper (AI Tooling Project)",
+  "CivicAlert (Real-time system)",
+];

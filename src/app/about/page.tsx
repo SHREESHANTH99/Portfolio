@@ -37,6 +37,12 @@ export default function AboutPage() {
                     <p className="text-lg text-[hsl(var(--color-text-secondary))] leading-relaxed">
                         {aboutData.intro}
                     </p>
+                    <p className="text-lg text-[hsl(var(--color-text-secondary))] leading-relaxed mt-6">
+                        {aboutData.systemsNote}
+                    </p>
+                    <p className="text-lg text-[hsl(var(--color-text-secondary))] leading-relaxed mt-6">
+                        {aboutData.recentBuild}
+                    </p>
                 </div>
             </section>
 
@@ -122,6 +128,28 @@ export default function AboutPage() {
                 </div>
             </section>
 
+            {/* Engineering Focus */}
+            <section className="container-custom py-24" aria-labelledby="engineering-focus-heading">
+                <h2
+                    id="engineering-focus-heading"
+                    className="text-2xl font-bold text-[hsl(var(--color-text-primary))] mb-10"
+                >
+                    Engineering Focus
+                </h2>
+                <ul className="grid md:grid-cols-2 gap-4">
+                    {aboutData.engineeringFocus.map((item) => (
+                        <li
+                            key={item}
+                            className="flex items-start gap-3 p-5 rounded-lg bg-[hsl(var(--color-bg-secondary))]
+                border border-[hsl(var(--color-border))]"
+                        >
+                            <span className="text-[hsl(var(--color-accent-primary))] mt-1" aria-hidden="true">•</span>
+                            <span className="text-[hsl(var(--color-text-secondary))]">{item}</span>
+                        </li>
+                    ))}
+                </ul>
+            </section>
+
             {/* Skills Grid */}
             <section className="container-custom py-32" aria-labelledby="skills-heading">
                 <h2
@@ -156,39 +184,15 @@ export default function AboutPage() {
                         </div>
                     </div>
 
-                    {/* Frontend */}
+                    {/* Backend & Systems */}
                     <div className="p-8 rounded-xl bg-[hsl(var(--color-bg-secondary))]
             border border-[hsl(var(--color-border))]">
                         <h3 className="text-sm font-semibold uppercase tracking-wider mb-6
               text-[hsl(var(--color-text-tertiary))]">
-                            Frontend
+                            Backend & Systems
                         </h3>
                         <div className="flex flex-wrap gap-3">
-                            {skills.frontend.map((skill) => (
-                                <span
-                                    key={skill}
-                                    className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-md
-                    bg-[hsl(var(--color-bg-tertiary))] 
-                    text-[hsl(var(--color-text-secondary))]
-                    hover:text-[hsl(var(--color-text-primary))]
-                    transition-colors"
-                                >
-                                    <SkillIcon name={skill} className="w-4 h-4 text-[hsl(var(--color-accent-secondary))]" />
-                                    {skill}
-                                </span>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Backend */}
-                    <div className="p-8 rounded-xl bg-[hsl(var(--color-bg-secondary))]
-            border border-[hsl(var(--color-border))]">
-                        <h3 className="text-sm font-semibold uppercase tracking-wider mb-6
-              text-[hsl(var(--color-text-tertiary))]">
-                            Backend
-                        </h3>
-                        <div className="flex flex-wrap gap-3">
-                            {skills.backend.map((skill) => (
+                            {skills.backendSystems.map((skill) => (
                                 <span
                                     key={skill}
                                     className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-md
@@ -204,15 +208,39 @@ export default function AboutPage() {
                         </div>
                     </div>
 
-                    {/* Blockchain */}
+                    {/* Databases & Infra */}
                     <div className="p-8 rounded-xl bg-[hsl(var(--color-bg-secondary))]
             border border-[hsl(var(--color-border))]">
                         <h3 className="text-sm font-semibold uppercase tracking-wider mb-6
               text-[hsl(var(--color-text-tertiary))]">
-                            Blockchain
+                            Databases & Infra
                         </h3>
                         <div className="flex flex-wrap gap-3">
-                            {skills.blockchain.map((skill) => (
+                            {skills.databasesInfra.map((skill) => (
+                                <span
+                                    key={skill}
+                                    className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-md
+                    bg-[hsl(var(--color-bg-tertiary))] 
+                    text-[hsl(var(--color-text-secondary))]
+                    hover:text-[hsl(var(--color-text-primary))]
+                    transition-colors"
+                                >
+                                    <SkillIcon name={skill} className="w-4 h-4 text-[hsl(var(--color-accent-secondary))]" />
+                                    {skill}
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* Concepts */}
+                    <div className="p-8 rounded-xl bg-[hsl(var(--color-bg-secondary))]
+            border border-[hsl(var(--color-border))]">
+                        <h3 className="text-sm font-semibold uppercase tracking-wider mb-6
+              text-[hsl(var(--color-text-tertiary))]">
+                            Concepts
+                        </h3>
+                        <div className="flex flex-wrap gap-3">
+                            {skills.concepts.map((skill) => (
                                 <span
                                     key={skill}
                                     className="inline-flex items-center gap-2 px-4 py-2 text-sm rounded-md
@@ -228,12 +256,12 @@ export default function AboutPage() {
                         </div>
                     </div>
 
-                    {/* Tools */}
+                        {/* Tools */}
                     <div className="p-8 rounded-xl bg-[hsl(var(--color-bg-secondary))]
             border border-[hsl(var(--color-border))] sm:col-span-2 lg:col-span-2">
                         <h3 className="text-sm font-semibold uppercase tracking-wider mb-6
               text-[hsl(var(--color-text-tertiary))]">
-                            Tools & DevOps
+                            Tools
                         </h3>
                         <div className="flex flex-wrap gap-3">
                             {skills.tools.map((skill) => (

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { projects, siteConfig } from "@/lib/data";
+import { highlightedWork, projects, siteConfig } from "@/lib/data";
 import ProjectCard from "@/components/ProjectCard";
 
 /**
@@ -294,6 +294,19 @@ export default function ProjectsPage() {
                     <p className="text-xl text-[hsl(var(--color-text-secondary))] mb-12 max-w-md mx-auto">
                         Explore more repositories, contributions, and code samples.
                     </p>
+                    <div className="max-w-xl mx-auto mb-10 text-left">
+                        <h3 className="text-lg font-semibold text-[hsl(var(--color-text-primary))] mb-4 text-center">
+                            Highlighted Work
+                        </h3>
+                        <ul className="space-y-2 text-[hsl(var(--color-text-secondary))]">
+                            {highlightedWork.map((item) => (
+                                <li key={item} className="flex items-start gap-3">
+                                    <span className="text-[hsl(var(--color-accent-primary))] mt-1" aria-hidden="true">•</span>
+                                    <span>{item}</span>
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
                     <a
                         href={siteConfig.github}
                         target="_blank"
