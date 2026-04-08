@@ -68,13 +68,14 @@ export const aboutData = {
 };
 
 // Project Categories
-export type ProjectCategory = "fullstack" | "blockchain";
+export type ProjectCategory = "fullstack" | "blockchain" | "developer-tools";
 
 export interface Project {
   id: string;
   title: string;
   description: string;
   longDescription: string;
+  engineeringInsight?: string;
   category: ProjectCategory;
   technologies: string[];
   github: string;
@@ -145,6 +146,53 @@ export const projects: Project[] = [
       "Job description tailoring for better matches",
       "Cover letter generation system",
       "Comprehensive dashboard with profile management",
+    ],
+  },
+  {
+    id: "lifecheck-ai",
+    title: "LifeCheck AI — Environmental Intelligence Platform",
+    description: "Full-stack environmental intelligence platform for real-time location safety decisions.",
+    longDescription: "LifeCheck AI is a full-stack environmental intelligence system designed to help users make real-time safety decisions based on environmental data. It answers a core question: Is this location safe right now, and what should I do next? The platform combines live AQI, weather, UV, and pollen signals into a unified safety verdict while coordinating AI guidance, predictive analytics, and spatial risk insights.",
+    engineeringInsight: "Focused on building a reliable, real-time decision system combining distributed state, AI inference, and multi-source data aggregation.",
+    category: "fullstack",
+    technologies: ["Python", "FastAPI", "Next.js", "TypeScript", "Rust", "SpaceTimeDB", "scikit-learn", "WebSockets", "Gemini AI", "ElevenLabs"],
+    github: "https://github.com/SHREESHANTH99/LifeCheckAi",
+    highlights: [
+      "Real-time safety analysis combining AQI, weather, UV, and pollen into Safe / Caution / Unsafe verdicts",
+      "AI assistant with low-latency streaming responses for contextual safety guidance",
+      "ML-based water quality prediction with confidence scoring and BIS compliance analysis",
+      "Interactive map for spatial risk visualization and real-time activity tracking",
+      "Alert system with severity prioritization and unread tracking",
+      "Voice-first safety briefings and alerts using text-to-speech",
+      "FastAPI backend with modular services for safety, chat, water, and alerts",
+      "SpaceTimeDB-powered shared state synchronization for multi-user real-time updates",
+      "Multi-LLM orchestration across Gemini, Groq, and DeepSeek with fallback strategy",
+      "Robust validation and null-safe data handling for production reliability",
+      "Event-driven architecture for real-time updates and alerting",
+      "Scalable external-provider integration with strong error handling and fallback paths",
+    ],
+  },
+  {
+    id: "gitwhisper",
+    title: "GitWhisper — AI-Powered Git Commit Generator",
+    description: "Developer CLI tool that generates meaningful commit messages from staged code diffs.",
+    longDescription: "GitWhisper is a developer productivity tool that automatically generates meaningful Git commit messages using AI based on code changes. It analyzes staged diffs, builds contextual prompts, and returns concise structured commit messages that fit naturally into daily development workflows.",
+    engineeringInsight: "Focused on automating developer workflows using AI with reliability and minimal latency.",
+    category: "developer-tools",
+    technologies: ["Python", "Git CLI", "Grok API", "Gemini AI", "Prompt Engineering"],
+    github: "https://github.com/SHREESHANTH99/GitWhisper",
+    highlights: [
+      "Analyzes staged Git diffs and generates structured, meaningful commit messages",
+      "Integrates Grok and Gemini for high-quality natural language generation",
+      "CLI-based workflow for seamless integration in developer environments",
+      "Context-aware understanding of code changes for accurate commit summaries",
+      "Python CLI architecture using subprocess integration with Git",
+      "Prompt formatting pipeline that transforms diffs into model-ready context",
+      "Multi-provider AI fallback handling for resilient message generation",
+      "Secure API usage with efficient request handling",
+      "Robust error handling for no staged changes and API failure cases",
+      "Optimized prompt engineering for concise and reliable output",
+      "Lightweight design optimized for daily low-latency usage",
     ],
   },
   

@@ -76,6 +76,12 @@ export default function ProjectCard({ project, index = 0 }: ProjectCardProps) {
                     {project.description}
                 </p>
 
+                {project.engineeringInsight && (
+                    <p className="text-xs font-['Rajdhani'] text-[#00f7ff]/70 mb-4 italic leading-relaxed">
+                        Engineering Insight: {project.engineeringInsight}
+                    </p>
+                )}
+
                 {/* Highlights */}
                 <ul className="mb-4 space-y-2">
                     {project.highlights.slice(0, 3).map((highlight, i) => (

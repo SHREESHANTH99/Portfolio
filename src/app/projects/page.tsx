@@ -13,11 +13,12 @@ import ProjectCard from "@/components/ProjectCard";
 
 export const metadata: Metadata = {
     title: "Projects",
-    description: `Explore ${siteConfig.name}'s portfolio of full-stack applications and Ethereum smart contract projects.`,
+    description: `Explore ${siteConfig.name}'s portfolio of full-stack applications, developer tools, and Ethereum smart contract projects.`,
 };
 
 export default function ProjectsPage() {
     const fullstackProjects = projects.filter((p) => p.category === "fullstack");
+    const developerToolsProjects = projects.filter((p) => p.category === "developer-tools");
     const blockchainProjects = projects.filter((p) => p.category === "blockchain");
 
     return (
@@ -33,7 +34,7 @@ export default function ProjectsPage() {
                         Projects
                     </h1>
                     <p className="text-xl text-[hsl(var(--color-text-secondary))]">
-                        A collection of full-stack applications and smart contract systems.
+                        A collection of full-stack applications, developer tools, and smart contract systems.
                         Each project emphasizes clean architecture, testing, and production-ready code.
                     </p>
                 </div>
@@ -80,6 +81,57 @@ export default function ProjectsPage() {
 
                 <div className="grid md:grid-cols-2 gap-10 mb-12">
                     {fullstackProjects.map((project, index) => (
+                        <ProjectCard key={project.id} project={project} index={index} />
+                    ))}
+                </div>
+            </section>
+
+            {/* Developer Tools */}
+            <section
+                className="container-custom mb-20"
+                aria-labelledby="developer-tools-heading"
+            >
+                <div className="flex items-center gap-5 mb-12">
+                    <div
+                        className="p-4 rounded-lg
+              bg-[hsl(var(--color-success)/0.1)] 
+              text-[hsl(var(--color-success))]"
+                        aria-hidden="true"
+                    >
+                        <svg
+                            className="w-7 h-7"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M11.49 3.17c.38-1.56 2.6-1.56 2.98 0a1.53 1.53 0 002.29.95c1.36-.8 2.93.78 2.14 2.14a1.53 1.53 0 00.95 2.29c1.56.38 1.56 2.6 0 2.98a1.53 1.53 0 00-.95 2.29c.8 1.36-.78 2.93-2.14 2.14a1.53 1.53 0 00-2.29.95c-.38 1.56-2.6 1.56-2.98 0a1.53 1.53 0 00-2.29-.95c-1.36.8-2.93-.78-2.14-2.14a1.53 1.53 0 00-.95-2.29c-1.56-.38-1.56-2.6 0-2.98a1.53 1.53 0 00.95-2.29c-.8-1.36.78-2.93 2.14-2.14.99.58 2.26.06 2.29-.95z"
+                            />
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M12 15.5A3.5 3.5 0 1012 8a3.5 3.5 0 000 7.5z"
+                            />
+                        </svg>
+                    </div>
+                    <h2
+                        id="developer-tools-heading"
+                        className="text-2xl sm:text-3xl font-bold text-[hsl(var(--color-text-primary))]"
+                    >
+                        Developer Tools
+                    </h2>
+                </div>
+
+                <p className="text-lg text-[hsl(var(--color-text-secondary))] mb-16 max-w-2xl">
+                    Productivity-focused tooling for developer workflows, automation, and AI-assisted engineering tasks.
+                </p>
+
+                <div className="grid md:grid-cols-2 gap-10">
+                    {developerToolsProjects.map((project, index) => (
                         <ProjectCard key={project.id} project={project} index={index} />
                     ))}
                 </div>
