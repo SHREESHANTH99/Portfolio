@@ -200,6 +200,31 @@ export const projects: Project[] = [
       "Helps developers quickly understand, present, and document projects by converting commit history into meaningful narratives",
     ],
   },
+  {
+    id: "nyxwall",
+    title: "NyxWall — Campus-First Anonymous Social Platform",
+    description: "Anonymous, campus-first social platform combining confessions, events, clubs, polls, profile systems, and realtime chat into one developer-friendly full-stack project.",
+    longDescription: "NyxWall is a comprehensive anonymous social platform purpose-built for student communities. It combines confessions feeds with reactions and trending support, event management with RSVP and attendees pagination, club discovery with membership management, real-time polls with live results, OTP-based authentication with JWT tokens, and WebSocket-powered realtime chat. The platform emphasizes end-to-end architecture with clear separation of concerns, built-in integration smoke tests for safe deployments, and a strong foundation for both product experimentation and technical contributions.",
+    engineeringInsight: "Full-Stack Architecture | Real-Time Systems | Moderation at Scale | Rate Limiting & Caching",
+    category: "fullstack",
+    technologies: ["Next.js", "TypeScript", "FastAPI", "Python", "PostgreSQL", "Redis", "WebSockets", "Docker Compose", "Celery"],
+    github: "https://github.com/SHREESHANTH99/nyxwall",
+    highlights: [
+      "OTP login flow with JWT authentication for anonymous user sessions",
+      "Anonymous confessions feed with create, vote, react, comment, report, and trending support",
+      "Polls system with creation, listing with pagination, voting, and live results endpoints",
+      "Events system with RSVP, attendees pagination, and ownership transfer capabilities",
+      "Clubs discovery with join/leave toggles and member pagination with lead transfer",
+      "Full-text search across confessions, events, clubs with fallback behavior",
+      "Real-time WebSocket chat module for instant student interactions",
+      "Redis-based caching strategy for hot feeds, event details, and user activity",
+      "Rate limiting middleware with endpoint-specific limits and strict fail-fast mode",
+      "Moderation service aligned across confessions and comments with confidence thresholding",
+      "Docker Compose setup with PostgreSQL, Redis, and Alembic migration system",
+      "Built-in smoke tests for key integration behaviors and Phase 3 features",
+      "3D-driven landing experience with Next.js App Router and TypeScript",
+    ],
+  },
   
   // Blockchain Projects
   {
